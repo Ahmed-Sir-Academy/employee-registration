@@ -2,6 +2,7 @@ package com.asa.employee.service;
 
 import com.asa.employee.entity.EmployeeEntity;
 import com.asa.employee.exceptions.InvalidRequestException;
+import com.asa.employee.exceptions.NotFoundException;
 import com.asa.employee.interfaces.EmployeeInterface;
 import com.asa.employee.model.Employee;
 import com.asa.employee.model.EmployeeResponse;
@@ -35,7 +36,22 @@ public class EmployeeService implements EmployeeInterface {
 
         employeeRepository.save(employeeEntity);
 
-        return new ResponseEntity<>(new EmployeeResponse("Employee Registered Successfully", HttpStatusCode.valueOf(200).value()), HttpStatusCode.valueOf(200));
+        return new ResponseEntity<>(new EmployeeResponse("Employee Registered Successfully",null, HttpStatusCode.valueOf(200).value()), HttpStatusCode.valueOf(200));
+    }
+
+    @Override
+    public ResponseEntity<?> findEmployeeByName(String name) {
+        if(name == null || name.isEmpty()){
+            throw new InvalidRequestException("Name cannot be empty");
+        }
+
+        Optional<EmployeeEntity> byName = employeeRepository.findByName(name);
+
+        if(byName.isPresent()){
+            return new ResponseEntity<>(new EmployeeResponse("Employee Found Successfully",byName.get(), HttpStatusCode.valueOf(200).value()), HttpStatusCode.valueOf(200));
+        }else{
+            throw new NotFoundException("No employee found with name "+name);
+        }
     }
 
     private EmployeeEntity convertModelToEntity(Employee employee) {

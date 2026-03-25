@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class EmployeeResponse {
     private String message;
+    private Object body;
     private int statusCode;
 }
