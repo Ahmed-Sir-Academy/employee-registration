@@ -21,7 +21,7 @@ public class EmployeeService implements EmployeeInterface {
     EmployeeRepository employeeRepository;
 
     @Override
-    public ResponseEntity<?> registerEmployee(Employee employee) {
+    public ResponseEntity<EmployeeResponse> registerEmployee(Employee employee) {
 
         validateEmployeeObject(employee);
 
@@ -64,8 +64,8 @@ public class EmployeeService implements EmployeeInterface {
     }
 
     private void validateEmployeeObject(Employee employee) {
-        if (employee == null || employee.getDesignation() == null || employee.getName() == null || employee.getSalary() == 0) {
-            throw new InvalidRequestException("Employee Designation or Name or Salry cannot be Null or Empty");
+        if (employee == null || employee.getDesignation() == null || employee.getDesignation().isEmpty() || employee.getName() == null || employee.getName().isEmpty() || employee.getSalary() == 0) {
+            throw new InvalidRequestException("Employee Designation or Name or Salary cannot be Null or Empty");
         }
     }
 }
